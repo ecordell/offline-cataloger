@@ -3,7 +3,10 @@ package apprclient
 import (
 	"net/url"
 
-	"github.com/kevinrizza/offline-cataloger/pkg/openapi"
+	"github.com/go-openapi/runtime"
+	httptransport "github.com/go-openapi/runtime/client"
+	"github.com/go-openapi/strfmt"
+	apprclient "github.com/operator-framework/go-appr/appregistry"
 )
 
 // NewClientFactory return a factory which can be used to instantiate a new appregistry client
@@ -36,18 +39,19 @@ func (f *factory) New(options Options) (Client, error) {
 		return nil, err
 	}
 
-	cfg := openapi.NewConfiguration()
-	cfg.Host = u.Host
-	cfg.BasePath = u.Path
-	cfg.Scheme = u.Scheme
+	transport := httptransport.New(u.Host, u.Path, []string{u.Scheme})
+	transport.Consumers["application/x-gzip"] = runtime.ByteStreamConsumer()
 
 	// If a token has been specified then we should pass it along in the headers
 	if options.AuthToken != "" {
-		cfg.AddDefaultHeader("Authorization", options.AuthToken)
+		tokenAuthWriter := httptransport.APIKeyAuth("Authorization", "header", options.AuthToken)
+		transport.DefaultAuthentication = tokenAuthWriter
 	}
 
+	c := apprclient.New(transport, strfmt.Default)
+
 	return &client{
-		adapter: &apprApiAdapterImpl{client: openapi.NewAPIClient(cfg)},
+		adapter: &apprApiAdapterImpl{client: c},
 		decoder: &blobDecoderImpl{},
 	}, nil
 }

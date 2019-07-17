@@ -11,6 +11,8 @@ package openapi
 
 // Package Item object
 type PackageDescription struct {
+	// default
+	Default string `json:"default,omitempty"`
 	// visibility
 	Visibility string   `json:"visibility,omitempty"`
 	Manifests  []string `json:"manifests,omitempty"`

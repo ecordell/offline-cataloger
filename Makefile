@@ -8,6 +8,7 @@ OPENAPI_PATH = ./pkg/openapi
 # Mocks
 MOCKS_PATH = ./pkg/mocks
 BUILDER_MOCKS_PKG = builder_mocks
+APPR_MOCKS_PKG = apprclient
 
 ifeq ($(GOBIN),)
 mockgen = $(GOPATH)/bin/mockgen
@@ -30,20 +31,20 @@ unit-test:
 	go test -v $(PKG_PATH)/...
 
 generate-mocks:
-	# Build mockgen from the same version used by gomock. This ensures that 
-	# gomock and mockgen are never out of sync.
+	@# Build mockgen from the same version used by gomock. This ensures that
+	@# gomock and mockgen are never out of sync.
 	go install ./vendor/github.com/golang/mock/mockgen
 	
 	@echo making sure directory for mocks exists
 	mkdir -p $(MOCKS_PATH)
 
-	# $(mockgen) -destination=<Path/file where the mock is generated> -package=<The package that the generated mock files will belong to> -mock_names=<Original Interface name>=<Name of Generated mocked Interface> <Go package path of the original interface> <comma seperated list of the interface you want to mock>
+	@# $(mockgen) -destination=<Path/file where the mock is generated> -package=<The package that the generated mock files will belong to> -mock_names=<Original Interface name>=<Name of Generated mocked Interface> <Go package path of the original interface> <comma seperated list of the interface you want to mock>
 
-	# builder package
-	$(mockgen) -destination=$(MOCKS_PATH)/$(BUILDER_MOCKS_PKG)/mock_downloader.go -package=$(BUILDER_MOCKS_PKG) -mock_names=Downloader=Downloader $(PKG_PATH)/downloader Downloader
-	$(mockgen) -destination=$(MOCKS_PATH)/$(BUILDER_MOCKS_PKG)/mock_imagebuilder.go -package=$(BUILDER_MOCKS_PKG) -mock_names=ImageBuilder=ImageBuilder $(PKG_PATH)/builder ImageBuilder
-	$(mockgen) -destination=$(MOCKS_PATH)/$(BUILDER_MOCKS_PKG)/mock_manifestdecoder.go -package=$(BUILDER_MOCKS_PKG) -mock_names=ManifestDecoder=ManifestDecoder $(PKG_PATH)/appregistry ManifestDecoder
-	$(mockgen) -destination=$(MOCKS_PATH)/$(BUILDER_MOCKS_PKG)/mock_appregistry.go -package=$(BUILDER_MOCKS_PKG) -mock_names=ClientFactory=AppRegistryClientFactory,Client=AppRegistryClient $(PKG_PATH)/apprclient ClientFactory,Client
+	@echo "Generating builder mocks"
+	@$(mockgen) -destination=$(MOCKS_PATH)/$(BUILDER_MOCKS_PKG)/mock_downloader.go -package=$(BUILDER_MOCKS_PKG) -mock_names=Downloader=Downloader $(PKG_PATH)/downloader Downloader
+	@$(mockgen) -destination=$(MOCKS_PATH)/$(BUILDER_MOCKS_PKG)/mock_imagebuilder.go -package=$(BUILDER_MOCKS_PKG) -mock_names=ImageBuilder=ImageBuilder $(PKG_PATH)/builder ImageBuilder
+	@$(mockgen) -destination=$(MOCKS_PATH)/$(BUILDER_MOCKS_PKG)/mock_manifestdecoder.go -package=$(BUILDER_MOCKS_PKG) -mock_names=ManifestDecoder=ManifestDecoder $(PKG_PATH)/appregistry ManifestDecoder
+	@$(mockgen) -destination=$(MOCKS_PATH)/$(BUILDER_MOCKS_PKG)/mock_appregistry.go -package=$(BUILDER_MOCKS_PKG) -mock_names=ClientFactory=AppRegistryClientFactory,Client=AppRegistryClient $(PKG_PATH)/apprclient ClientFactory,Client
 
 $(OPENAPI_GEN):
 	@command -v openapi-generator || echo "openapi-generator not found. Install on macOS: brew install openapi-generator"
@@ -64,6 +65,7 @@ generate-openapi: appr.spec.yaml
 	@sed -i "s/PullPackageJsonOpts/BlobPullPackageJsonOpts/gi" $(OPENAPI_PATH)/api_blobs.go
 	@echo Fixing missing imports...
 	@goimports -w $(OPENAPI_PATH)
+	@echo "Not complete, manually update api_blobs.go to return the file bytes instead of attempting to parse as json"
 
 clean-mocks:
 	@echo cleaning mock folder

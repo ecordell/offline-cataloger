@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Default** | **string** | default | [optional] 
 **Visibility** | **string** | visibility | [optional] 
 **Manifests** | **[]string** |  | [optional] 
 **Channels** | **[]string** |  | [optional] 

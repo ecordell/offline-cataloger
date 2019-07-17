@@ -1007,6 +1007,7 @@ components:
     PackageDescription:
       description: Package Item object
       example:
+        default: default
         visibility: visibility
         channels:
         - channels
@@ -1022,6 +1023,10 @@ components:
         - releases
         - releases
       properties:
+        default:
+          description: default
+          title: default
+          type: string
         visibility:
           description: visibility
           title: visibility

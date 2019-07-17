@@ -954,6 +954,10 @@ definitions:
     title: Package Item
     description: Package Item object
     properties:
+      default:
+        type: string
+        title: default
+        description: default
       visibility:
         type: string
         title: visibility

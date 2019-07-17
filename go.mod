@@ -19,6 +19,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/operator-framework/go-appr v0.0.0-20180917210448-f2aef88446f2
 	github.com/operator-framework/operator-lifecycle-manager v0.0.0-20190522155654-7b2b397ad0cc
+	github.com/operator-framework/operator-registry v1.1.0
 	github.com/pelletier/go-toml v1.4.0 // indirect
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/afero v1.2.2 // indirect

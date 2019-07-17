@@ -3,6 +3,7 @@ module github.com/kevinrizza/offline-cataloger
 go 1.12
 
 require (
+	github.com/antihax/optional v0.0.0-20180407024304-ca021399b1a6
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-openapi/analysis v0.19.0 // indirect
 	github.com/go-openapi/errors v0.19.0 // indirect
@@ -26,7 +27,7 @@ require (
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.3.0
 	golang.org/x/crypto v0.0.0-20190530122614-20be4c3c3ed5 // indirect
-	golang.org/x/oauth2 v0.0.0-20190523182746-aaccbc9213b0 // indirect
+	golang.org/x/oauth2 v0.0.0-20190523182746-aaccbc9213b0
 	golang.org/x/sys v0.0.0-20190602015325-4c4f7f33c9ed // indirect
 	golang.org/x/text v0.3.2 // indirect
 	google.golang.org/appengine v1.6.0 // indirect
